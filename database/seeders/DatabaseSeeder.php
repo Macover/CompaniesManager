@@ -7,6 +7,7 @@ namespace Database\Seeders;
 use App\Models\Company;
 use App\Models\Employee;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,10 +20,11 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        \App\Models\User::factory()->create([
+            'name' => 'admin',
+            'email' => 'admin@admin.com',
+            'password' => Hash::make('password'),
+        ]);
 
         Company::factory(5)->create();
         Employee::factory(50)->create();
