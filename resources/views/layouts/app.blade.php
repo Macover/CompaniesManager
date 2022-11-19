@@ -25,6 +25,9 @@
     <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap5.min.js"></script>
 
+    <!-- Icons -->
+    <script src="https://kit.fontawesome.com/c42fe0a229.js" crossorigin="anonymous"></script>
+
 </head>
 
 <body class="font-sans antialiased">
