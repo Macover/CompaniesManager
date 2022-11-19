@@ -2,10 +2,6 @@
 
 ## Basically, project to manage companies and their employees. Mini-CRM.
 
-1. Basic Laravel Auth: ability to log in as administrator
-
-2. Use database seeds to create first user with email admin@admin.com and password "password"
-
 3. CRUD functionality (Create / Read / Update / Delete) for two menu items: Companies and Employees.
 
 4. Companies DB table consists of these fields: Name (required), email, logo (minimum 100x100), website
