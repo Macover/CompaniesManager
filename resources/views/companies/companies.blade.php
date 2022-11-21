@@ -10,10 +10,10 @@
 
 @section('content')
 
-    <div class="container px-16">
-        <div class="row px-10">
-            <div class="col-12 px-6">
-                <table id="example" class="table table-bordered table-responsive">
+    <div class="row p-0 m-0">
+        <div class="col-12 m-0 p-0">
+            <div class="table-responsive-sm table-responsive-md">
+                <table id="example" class="table">
                     <thead>
                         <tr>
                             <th>Name</th>
@@ -22,8 +22,8 @@
                             <th>Website</th>
                             <th>Actions</th>
                         </tr>
-                        <div class="container m-0 p-0 w-100 d-flex my-4 justify-content-end">
-                            <button class="btn btn-primary">
+                        <div class="row p-0 mx-0 my-4 w-100 d-flex justify-content-end">
+                            <button class="btn btn-primary w-25">
                                 <i class="fa-solid fa-plus mr-2"></i>
                                 New company
                             </button>
@@ -49,7 +49,7 @@
                                                     Edit
                                                 </button>
                                                 <button class="btn btn-danger flex-1">
-                                                    <i class="fa-light fa-trash"></i>
+                                                    X
                                                     Delete
                                                 </button>
                                             </div>

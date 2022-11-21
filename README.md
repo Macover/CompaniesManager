@@ -4,6 +4,8 @@
 
 3. CRUD functionality (Create / Read / Update / Delete) for two menu items: Companies and Employees.
 
+3. Change the home page.
+
 4. Companies DB table consists of these fields: Name (required), email, logo (minimum 100x100), website
 Employees DB table consists of these fields: First name (required), last name (required), Company (foreign key to Companies), email, phone
 

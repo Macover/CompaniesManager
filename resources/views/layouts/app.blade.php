@@ -42,7 +42,7 @@
             </div>
         </header>
         <!-- Page Content -->
-        <main class="bg-white px-16 w-100 min-vh-100">
+        <main class="bg-white w-100 min-vh-100 px-16 px-sm-1 px-md-4 px-lg-5 px-xl-5 px-xxl-5">
             @yield('content')
         </main>
     </div>
