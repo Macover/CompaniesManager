@@ -13,6 +13,31 @@
     <div class="container px-16">
         <div class="row px-10">
             <div class="col-12 px-6">
+                <form class="form" method="POST" action="#">
+                    <div class="mb-3">
+                        <label for="companyName" class="form-label">Company Name</label>
+                        <input placeholder="Ex. Microsoft" id="companyName" name="company_name" type="text"
+                            class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="companyEmail" class="form-label">Email</label>
+                        <input placeholder="Ex. microsoft@hotmail.com" id="companyEmail" name="company_email" type="email"
+                            class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="companyLogo" class="form-label">Logo</label>
+                        <input placeholder="Ex. Path/safds/sdf" id="companyLogo" name="company_logo" type="text"
+                            class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label for="companyWebSite" class="form-label">Website</label>
+                        <input placeholder="Ex. microsoft.com" id="companyWebSite" name="company_web" type="text"
+                            class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <input value="Add Company" type="submit" class="btn btn-outline-primary">
+                    </div>
+                </form>
                 <table id="example" class="table table-bordered table-responsive">
                     <thead>
                         <tr>
@@ -23,7 +48,7 @@
                             <th>Actions</th>
                         </tr>
                         <div class="container m-0 p-0 w-100 d-flex my-4 justify-content-end">
-                            <button class="btn btn-primary">
+                            <button class="btn btn-primary" id="newCompanyBtn">
                                 <i class="fa-solid fa-plus mr-2"></i>
                                 New company
                             </button>
@@ -78,8 +103,33 @@
 @section('script')
     <script>
         $(document).ready(function() {
-            console.log("first")
             $('#example').DataTable();
+
+            $('#newCompanyBtn').click(function(e) {
+                Swal.fire({
+                    title: 'Fill up the form to add it',
+                    html: `
+                        <form class="form" method="POST" action="#">
+                            <div class="form-group">
+                                <label class="">Company name: </label>
+                                <input id="companyName" name="company_name" placeholder="Ex. Apple Inc.">
+                            </div> 
+                        </form>`,
+                    showCancelButton: true,
+                    confirmButtonText: 'Save',
+                    showLoaderOnConfirm: true,
+                    preConfirm: (login) => {
+                        
+                    }
+                }).then((result) => {
+                    /* Read more about isConfirmed, isDenied below */
+                    if (result.isConfirmed) {
+                        Swal.fire('Saved!', '', 'success')
+                    } else if (result.isDenied) {
+                        Swal.fire('Changes are not saved', '', 'info')
+                    }
+                })
+            });
         });
     </script>
 @endsection
