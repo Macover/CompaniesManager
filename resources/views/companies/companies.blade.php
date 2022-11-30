@@ -13,31 +13,27 @@
     <div class="container px-16">
         <div class="row px-10">
             <div class="col-12 px-6">
-                <form class="form" method="POST" action="#">
+
+                <div class="form">
                     <div class="mb-3">
                         <label for="companyName" class="form-label">Company Name</label>
-                        <input placeholder="Ex. Microsoft" id="companyName" name="company_name" type="text"
-                            class="form-control">
+                        <input placeholder="Ex. Microsoft" id="companyName" type="text" class="form-control">
                     </div>
                     <div class="mb-3">
                         <label for="companyEmail" class="form-label">Email</label>
-                        <input placeholder="Ex. microsoft@hotmail.com" id="companyEmail" name="company_email" type="email"
+                        <input placeholder="Ex. microsoft@hotmail.com" id="companyEmail" type="email"
                             class="form-control">
                     </div>
                     <div class="mb-3">
                         <label for="companyLogo" class="form-label">Logo</label>
-                        <input placeholder="Ex. Path/safds/sdf" id="companyLogo" name="company_logo" type="text"
-                            class="form-control">
+                        <input placeholder="Ex. Path/safds/sdf" id="companyLogo" type="text" class="form-control">
                     </div>
                     <div class="mb-3">
                         <label for="companyWebSite" class="form-label">Website</label>
-                        <input placeholder="Ex. microsoft.com" id="companyWebSite" name="company_web" type="text"
-                            class="form-control">
+                        <input placeholder="Ex. microsoft.com" id="companyWebSite" type="text" class="form-control">
                     </div>
-                    <div class="mb-3">
-                        <input value="Add Company" type="submit" class="btn btn-outline-primary">
-                    </div>
-                </form>
+                </div>
+
                 <table id="example" class="table table-bordered table-responsive">
                     <thead>
                         <tr>
@@ -106,25 +102,86 @@
             $('#example').DataTable();
 
             $('#newCompanyBtn').click(function(e) {
+
+                const url = `{{ route('companies.store') }}`;
+
                 Swal.fire({
                     title: 'Fill up the form to add it',
                     html: `
-                        <form class="form" method="POST" action="#">
-                            <div class="form-group">
-                                <label class="">Company name: </label>
-                                <input id="companyName" name="company_name" placeholder="Ex. Apple Inc.">
-                            </div> 
-                        </form>`,
+                    <div class="form">
+                        <div class="mb-3">
+                            <label for="companyName" class="form-label">Company Name</label>
+                            <input placeholder="Ex. Microsoft" id="companyName" type="text"
+                                class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="companyEmail" class="form-label">Email</label>
+                            <input placeholder="Ex. microsoft@hotmail.com" id="companyEmail" type="email"
+                                class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="companyLogo" class="form-label">Logo</label>
+                            <input placeholder="Ex. Path/safds/sdf" id="companyLogo" type="text"
+                                class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <label for="companyWebSite" class="form-label">Website</label>
+                            <input placeholder="Ex. microsoft.com" id="companyWebSite" type="text"
+                                class="form-control">
+                        </div>                    
+                    </div>                    
+                    `,
                     showCancelButton: true,
                     confirmButtonText: 'Save',
                     showLoaderOnConfirm: true,
-                    preConfirm: (login) => {
-                        
-                    }
+                    preConfirm: async () => {
+
+                        const companyName = $('#companyName').val();
+                        const companyEmail = $('#companyEmail').val();
+                        const companyLogo = $('#companyLogo').val();
+                        const companyWebSite = $('#companyWebSite').val();
+
+                        const data = {
+                            "name": companyName,
+                            "email": companyEmail,
+                            "logo": companyLogo,
+                            "website": companyWebSite,
+                        };
+                         return fetch(url, {
+                            method: "POST",
+                            headers: {
+                                'Accept' : 'application/json',
+                                'Content-Type': 'application/json'
+                            },
+                            body: data
+                        }).then(response =>{
+                            return response.json();
+                        })
+                        // .then(res => {
+                        //     console.log("Request complete! response:", res);
+                        // });
+                        // .then(response => {
+                        //     if (!response.ok) {
+                        //         throw new Error(response.statusText)
+                        //     }
+                        //     return response.json()
+                        // })
+                        // .catch(error => {
+                        //     Swal.showValidationMessage(
+                        //         `Request failed: ${error}`
+                        //     )
+                        // })
+
+
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
                 }).then((result) => {
-                    /* Read more about isConfirmed, isDenied below */
+
+                    console.log(result)
+
                     if (result.isConfirmed) {
-                        Swal.fire('Saved!', '', 'success')
+                        console.log("result", result)
+                        console.log("value", result.value)
                     } else if (result.isDenied) {
                         Swal.fire('Changes are not saved', '', 'info')
                     }
