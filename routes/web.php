@@ -20,10 +20,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+
+
 Route::middleware('auth')->group(function () {
 
     /* Companies */
     Route::get('/companies', [CompanyController::class, 'index'])->name('companies');
+    Route::post('/com', [CompanyController::class, 'store'])->name('companies.store');
 
     /* Employees */
     Route::get('/employees', [EmployeeController::class, 'index'])->name('employees');
@@ -35,4 +38,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
