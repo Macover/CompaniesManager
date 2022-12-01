@@ -48,10 +48,16 @@
                                                     <i class="fa-regular fa-pen-to-square"></i>
                                                     Edit
                                                 </button>
-                                                <button class="btn btn-danger flex-1">
-                                                    X
-                                                    Delete
-                                                </button>
+                                                <form method="POST" class="d-inline"
+                                                    action="{{ route('companies.destroy', ['company' => $company->id]) }}">
+                                                    @method('DELETE')
+                                                    <input type="hidden" class="companyName" value="{{ $company->name }}">
+                                                    <button type="submit"
+                                                        class="btn btn-outline-danger flex-1 show-alert-delete-box">
+                                                        X
+                                                        Delete
+                                                    </button>
+                                                </form>
                                             </div>
                                         </div>
                                     </td>
@@ -78,6 +84,15 @@
 @section('script')
     <script>
         $(document).ready(function() {
+
+            @if (session()->has('successDeleted'))
+                Swal.fire(
+                    'Deleted!',
+                    `{{ session()->get('successDeleted') }}`,
+                    'success'
+                )
+            @endif
+
             $('#example').DataTable();
 
             $('#newCompanyBtn').click(function(e) {
@@ -127,16 +142,12 @@
                             "website": companyWebSite,
                         };
 
-                        $.ajax({
+                        return $.ajax({
                             type: "POST",
                             url: url,
                             data: data,
                             success: (resultRequest) => {
-                                swalWithBootstrapButtons.fire(
-                                    'Success!',
-                                    `The company ${data.name} was added`,
-                                    'success'
-                                )
+                                console.log("resultRequest", resultRequest)
                             },
                             // error: (XMLHttpRequest, textStatus, errorThrown) => {
                             //     console.log(XMLHttpRequest)
@@ -162,14 +173,42 @@
                     },
                     allowOutsideClick: () => !Swal.isLoading()
                 }).then((result) => {
-                    if (result.isConfirmed) {
+                    console.log("generalResult", result)
+                    console.log(result.value.id ?? false)
+                    if (result.value.id ?? false) {
+                        Swal.fire(
+                            'Success!',
+                            `The company ${result.value.name} was added`,
+                            'success'
+                        )
                         console.log("result", result)
-                        console.log("value", result.value)
-                    } else if (result.isDenied) {
-                        Swal.fire('Changes are not saved', '', 'info')
+                    } else {
+                        Swal.fire('Error', '', 'info')
                     }
                 })
             });
+
+            $('.show-alert-delete-box').click(function(event) {
+                event.preventDefault();
+                let form = $(this).closest("form");
+                let companyName = $(this).siblings()[1].value;
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: `${companyName} will be deleted`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                })
+
+            })
+
         });
     </script>
 @endsection

@@ -25,4 +25,14 @@ class CompanyController extends Controller
             return response()->json($companyCreated);
         });
     }
+
+    public function destroy(Company $company)
+    {
+        return DB::transaction(function () use ($company) {
+            $company->delete();
+            return redirect()
+                    ->route('companies')
+                    ->with(['successDeleted' => "{$company->name} was deleted successfully"]);
+        });
+    }
 }
