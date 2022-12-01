@@ -19,6 +19,7 @@ class CompanyController extends Controller
 
     public function store(CompanyStoreRequest $company)
     {
+        // dd($company);
         return DB::transaction(function () use ($company) {
             $companyCreated = Company::create($company->validated());
             return response()->json($companyCreated);

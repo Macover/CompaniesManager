@@ -13,27 +13,6 @@
     <div class="container px-16">
         <div class="row px-10">
             <div class="col-12 px-6">
-
-                <div class="form">
-                    <div class="mb-3">
-                        <label for="companyName" class="form-label">Company Name</label>
-                        <input placeholder="Ex. Microsoft" id="companyName" type="text" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label for="companyEmail" class="form-label">Email</label>
-                        <input placeholder="Ex. microsoft@hotmail.com" id="companyEmail" type="email"
-                            class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label for="companyLogo" class="form-label">Logo</label>
-                        <input placeholder="Ex. Path/safds/sdf" id="companyLogo" type="text" class="form-control">
-                    </div>
-                    <div class="mb-3">
-                        <label for="companyWebSite" class="form-label">Website</label>
-                        <input placeholder="Ex. microsoft.com" id="companyWebSite" type="text" class="form-control">
-                    </div>
-                </div>
-
                 <table id="example" class="table table-bordered table-responsive">
                     <thead>
                         <tr>
@@ -106,26 +85,26 @@
                 const url = `{{ route('companies.store') }}`;
 
                 Swal.fire({
-                    title: 'Fill up the form to add it',
+                    title: 'New company',
                     html: `
                     <div class="form">
-                        <div class="mb-3">
-                            <label for="companyName" class="form-label">Company Name</label>
+                        <div class="mb-3 d-flex flex-column">
+                            <label for="companyName" class="form-label text-start">Company Name</label>
                             <input placeholder="Ex. Microsoft" id="companyName" type="text"
                                 class="form-control">
                         </div>
-                        <div class="mb-3">
-                            <label for="companyEmail" class="form-label">Email</label>
+                        <div class="mb-3 d-flex flex-column">
+                            <label for="companyEmail" class="form-label text-start">Email</label>
                             <input placeholder="Ex. microsoft@hotmail.com" id="companyEmail" type="email"
                                 class="form-control">
                         </div>
-                        <div class="mb-3">
-                            <label for="companyLogo" class="form-label">Logo</label>
+                        <div class="mb-3 d-flex flex-column">
+                            <label for="companyLogo" class="form-label text-start">Logo</label>
                             <input placeholder="Ex. Path/safds/sdf" id="companyLogo" type="text"
                                 class="form-control">
                         </div>
-                        <div class="mb-3">
-                            <label for="companyWebSite" class="form-label">Website</label>
+                        <div class="mb-3 d-flex flex-column">
+                            <label for="companyWebSite" class="form-label text-start">Website</label>
                             <input placeholder="Ex. microsoft.com" id="companyWebSite" type="text"
                                 class="form-control">
                         </div>
@@ -147,38 +126,42 @@
                             "logo": companyLogo,
                             "website": companyWebSite,
                         };
-                         return fetch(url, {
-                            method: "POST",
-                            headers: {
-                                'Accept' : 'application/json',
-                                'Content-Type': 'application/json'
+
+                        $.ajax({
+                            type: "POST",
+                            url: url,
+                            data: data,
+                            success: (resultRequest) => {
+                                swalWithBootstrapButtons.fire(
+                                    'Success!',
+                                    `The company ${data.name} was added`,
+                                    'success'
+                                )
                             },
-                            body: data
-                        }).then(response =>{
-                            return response.json();
-                        })
-                        // .then(res => {
-                        //     console.log("Request complete! response:", res);
-                        // });
-                        // .then(response => {
-                        //     if (!response.ok) {
-                        //         throw new Error(response.statusText)
-                        //     }
-                        //     return response.json()
-                        // })
-                        // .catch(error => {
-                        //     Swal.showValidationMessage(
-                        //         `Request failed: ${error}`
-                        //     )
-                        // })
+                            // error: (XMLHttpRequest, textStatus, errorThrown) => {
+                            //     console.log(XMLHttpRequest)
+                            //     const errors = XMLHttpRequest.responseJSON.errors;
 
+                            //     console.log("errors", errors)
 
+                            //     for (const i in errors) {
+                            //         if (Object.hasOwnProperty.call(errors, i)) {
+                            //             const element = errors[i];
+                            //             element.forEach(error => {
+                            //                 Swal.showValidationMessage(
+                            //                     `Request failed: ${error}`
+                            //                 )
+                            //             })
+                            //         }
+                            //     }
+                            //     // Swal.showValidationMessage(
+                            //     //     `Request failed: ${XMLHttpRequest.responseJSON}`
+                            //     // )
+                            // }
+                        });
                     },
                     allowOutsideClick: () => !Swal.isLoading()
                 }).then((result) => {
-
-                    console.log(result)
-
                     if (result.isConfirmed) {
                         console.log("result", result)
                         console.log("value", result.value)
