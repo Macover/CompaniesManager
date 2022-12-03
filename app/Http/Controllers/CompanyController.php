@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CompanyStoreRequest;
 use App\Models\Company;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 
 class CompanyController extends Controller
 {
@@ -19,10 +21,20 @@ class CompanyController extends Controller
 
     public function store(CompanyStoreRequest $company)
     {
-        // dd($company);
         return DB::transaction(function () use ($company) {
-            $companyCreated = Company::create($company->validated());
-            return response()->json($companyCreated);
+            try {
+                $companyCreated = Company::create($company->validated());
+                Log::channel('info')->info("The company was created succesfully");
+
+                Session::flash('success', "{$company->name} was added successfully");
+                return redirect()->route('companies');
+
+            } catch (\Throwable $th) {
+                Log::channel('error')->error("The company was not created succesfully {$th}");
+                return redirect()
+                    ->route('companies')
+                    ->with(['error' => "{$company->name} error"]);
+            }
         });
     }
 
@@ -31,8 +43,8 @@ class CompanyController extends Controller
         return DB::transaction(function () use ($company) {
             $company->delete();
             return redirect()
-                    ->route('companies')
-                    ->with(['successDeleted' => "{$company->name} was deleted successfully"]);
+                ->route('companies')
+                ->with(['success' => "{$company->name} was deleted successfully"]);
         });
     }
 }

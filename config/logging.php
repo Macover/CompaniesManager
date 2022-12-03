@@ -51,6 +51,19 @@ return [
     */
 
     'channels' => [
+
+        'info' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/info/info.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+        ],
+
+        'error' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/error/error.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+        ],
+
         'stack' => [
             'driver' => 'stack',
             'channels' => ['single'],

@@ -85,50 +85,57 @@
     <script>
         $(document).ready(function() {
 
-            @if (session()->has('successDeleted'))
+            @if (session()->has('success'))
                 Swal.fire(
-                    'Deleted!',
-                    `{{ session()->get('successDeleted') }}`,
+                    'Done!',
+                    `{{ session()->get('success') }}`,
                     'success'
+                )
+            @endif
+
+            @if (session()->has('error'))
+                Swal.fire(
+                    'Error!',
+                    `{{ session()->get('error') }}`,
+                    'error'
                 )
             @endif
 
             $('#example').DataTable();
 
-            $('#newCompanyBtn').click(function(e) {
+            $('#newCompanyBtn').click(async function(e) {
 
-                const url = `{{ route('companies.store') }}`;
-
-                Swal.fire({
+                const {
+                    value: prePostCompany
+                } = await Swal.fire({
                     title: 'New company',
                     html: `
-                    <div class="form">
-                        <div class="mb-3 d-flex flex-column">
-                            <label for="companyName" class="form-label text-start">Company Name</label>
-                            <input placeholder="Ex. Microsoft" id="companyName" type="text"
-                                class="form-control">
-                        </div>
-                        <div class="mb-3 d-flex flex-column">
-                            <label for="companyEmail" class="form-label text-start">Email</label>
-                            <input placeholder="Ex. microsoft@hotmail.com" id="companyEmail" type="email"
-                                class="form-control">
-                        </div>
-                        <div class="mb-3 d-flex flex-column">
-                            <label for="companyLogo" class="form-label text-start">Logo</label>
-                            <input placeholder="Ex. Path/safds/sdf" id="companyLogo" type="text"
-                                class="form-control">
-                        </div>
-                        <div class="mb-3 d-flex flex-column">
-                            <label for="companyWebSite" class="form-label text-start">Website</label>
-                            <input placeholder="Ex. microsoft.com" id="companyWebSite" type="text"
-                                class="form-control">
-                        </div>
-                    </div>
-                    `,
+                            <div class="form">
+                                <div class="mb-3 d-flex flex-column">
+                                    <label for="companyName" class="form-label text-start">Company Name</label>
+                                    <input placeholder="Ex. Microsoft" id="companyName" type="text"
+                                        class="form-control">
+                                </div>
+                                <div class="mb-3 d-flex flex-column">
+                                    <label for="companyEmail" class="form-label text-start">Email</label>
+                                    <input placeholder="Ex. microsoft@hotmail.com" id="companyEmail" type="email"
+                                        class="form-control">
+                                </div>
+                                <div class="mb-3 d-flex flex-column">
+                                    <label for="companyLogo" class="form-label text-start">Logo</label>
+                                    <input placeholder="Ex. Path/safds/sdf" id="companyLogo" type="text"
+                                        class="form-control">
+                                </div>
+                                <div class="mb-3 d-flex flex-column">
+                                    <label for="companyWebSite" class="form-label text-start">Website</label>
+                                    <input placeholder="Ex. microsoft.com" id="companyWebSite" type="text"
+                                        class="form-control">
+                                </div>
+                            </div>`,
                     showCancelButton: true,
-                    confirmButtonText: 'Save',
+                    confirmButtonText: 'Add',
                     showLoaderOnConfirm: true,
-                    preConfirm: async () => {
+                    preConfirm: () => {
 
                         const companyName = $('#companyName').val();
                         const companyEmail = $('#companyEmail').val();
@@ -140,52 +147,40 @@
                             "email": companyEmail,
                             "logo": companyLogo,
                             "website": companyWebSite,
-                        };
+                        }
 
-                        return $.ajax({
-                            type: "POST",
-                            url: url,
-                            data: data,
-                            success: (resultRequest) => {
-                                console.log("resultRequest", resultRequest)
+                        const requestOptions = {
+                            method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                            mode: 'cors', // no-cors, *cors, same-origin
+                            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                            credentials: 'same-origin', // include, *same-origin, omit
+                            headers: {
+                                'Content-Type': 'application/json'
+                                // 'Content-Type': 'application/x-www-form-urlencoded',
                             },
-                            // error: (XMLHttpRequest, textStatus, errorThrown) => {
-                            //     console.log(XMLHttpRequest)
-                            //     const errors = XMLHttpRequest.responseJSON.errors;
+                            redirect: 'follow', // manual, *follow, error
+                            referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+                            body: JSON.stringify(data)
+                        }
 
-                            //     console.log("errors", errors)
+                        console.log("preData", data);
 
-                            //     for (const i in errors) {
-                            //         if (Object.hasOwnProperty.call(errors, i)) {
-                            //             const element = errors[i];
-                            //             element.forEach(error => {
-                            //                 Swal.showValidationMessage(
-                            //                     `Request failed: ${error}`
-                            //                 )
-                            //             })
-                            //         }
-                            //     }
-                            //     // Swal.showValidationMessage(
-                            //     //     `Request failed: ${XMLHttpRequest.responseJSON}`
-                            //     // )
-                            // }
-                        });
-                    },
-                    allowOutsideClick: () => !Swal.isLoading()
-                }).then((result) => {
-                    console.log("generalResult", result)
-                    console.log(result.value.id ?? false)
-                    if (result.value.id ?? false) {
-                        Swal.fire(
-                            'Success!',
-                            `The company ${result.value.name} was added`,
-                            'success'
-                        )
-                        console.log("result", result)
-                    } else {
-                        Swal.fire('Error', '', 'info')
+                        return fetch("{{ route('companies.store') }}", requestOptions)
+                            .then(response => console.log(response));
                     }
                 })
+
+                console.log("promise", prePostCompany)
+
+                // .then((result) => {
+                //     if (result.isConfirmed) {
+                //         // let form = $('#formAddCompany');
+                //         // console.log("form", form)
+                //         // form.submit();
+                //     }
+                // })
+
+
             });
 
             $('.show-alert-delete-box').click(function(event) {
