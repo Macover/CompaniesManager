@@ -21,16 +21,26 @@ class CompanyController extends Controller
 
     public function store(CompanyStoreRequest $company)
     {
+
         return DB::transaction(function () use ($company) {
+
             try {
-                $companyCreated = Company::create($company->validated());
+                Company::create($company->validated());
                 Log::channel('info')->info("The company was created succesfully");
-
-                Session::flash('success', "{$company->name} was added successfully");
-                return redirect()->route('companies');
-
+                return redirect()
+                    ->route('companies')
+                    ->with(['success' => "{$company->name} was created"]);
             } catch (\Throwable $th) {
-                Log::channel('error')->error("The company was not created succesfully {$th}");
+                // Log::channel('error')->error("The company was not created succesfully {$th}}");
+
+                dump($company->messages());
+
+                // for ($i = 0; $i < $company->messages(); $i++) {
+                //     Log::channel('error')->error("{$i}.- {}}");
+                // }
+                // foreach ($company->messages() as $key => $error) {
+                //     Log::channel('error')->error("{$key}.- {$error}}");
+                // }
                 return redirect()
                     ->route('companies')
                     ->with(['error' => "{$company->name} error"]);

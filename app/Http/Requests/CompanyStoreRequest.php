@@ -30,4 +30,10 @@ class CompanyStoreRequest extends FormRequest
             'website' => 'required|max:50',
         ];
     }
+    public function messages()
+    {
+        return [
+            'name.required' => 'The name is required.',
+        ];
+    }
 }

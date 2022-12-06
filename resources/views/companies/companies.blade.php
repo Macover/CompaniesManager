@@ -93,6 +93,23 @@
                 )
             @endif
 
+            @if (isset($errors))
+
+                let errors1 =
+                    "@foreach ($errors->all() as $error)
+                        "{{$error}}"
+                    @endforeach"
+                console.log(errors1)
+
+                Swal.fire(
+                    'Error!',
+                    @foreach ($errors->all() as $error)
+                        `{{ $errors }}`,
+                    @endforeach
+                    'error'
+                )
+            @endif
+
             @if (session()->has('error'))
                 Swal.fire(
                     'Error!',
@@ -105,72 +122,81 @@
 
             $('#newCompanyBtn').click(async function(e) {
 
-                const {
-                    value: prePostCompany
-                } = await Swal.fire({
+                e.preventDefault();
+
+                const companyPromise = await Swal.fire({
                     title: 'New company',
                     html: `
-                            <div class="form">
+                            <form id="addCompanyForm" action="{{ route('companies.store') }}" method="post" class="form">
                                 <div class="mb-3 d-flex flex-column">
                                     <label for="companyName" class="form-label text-start">Company Name</label>
-                                    <input placeholder="Ex. Microsoft" id="companyName" type="text"
+                                    <input name="name" placeholder="Ex. Microsoft" id="companyName" type="text"
                                         class="form-control">
                                 </div>
                                 <div class="mb-3 d-flex flex-column">
                                     <label for="companyEmail" class="form-label text-start">Email</label>
-                                    <input placeholder="Ex. microsoft@hotmail.com" id="companyEmail" type="email"
+                                    <input name="email" placeholder="Ex. microsoft@hotmail.com" id="companyEmail" type="email"
                                         class="form-control">
                                 </div>
                                 <div class="mb-3 d-flex flex-column">
                                     <label for="companyLogo" class="form-label text-start">Logo</label>
-                                    <input placeholder="Ex. Path/safds/sdf" id="companyLogo" type="text"
+                                    <input name="logo" placeholder="Ex. Path/safds/sdf" id="companyLogo" type="text"
                                         class="form-control">
                                 </div>
                                 <div class="mb-3 d-flex flex-column">
                                     <label for="companyWebSite" class="form-label text-start">Website</label>
-                                    <input placeholder="Ex. microsoft.com" id="companyWebSite" type="text"
+                                    <input name="website" placeholder="Ex. microsoft.com" id="companyWebSite" type="text"
                                         class="form-control">
                                 </div>
-                            </div>`,
+                            </form>`,
                     showCancelButton: true,
                     confirmButtonText: 'Add',
                     showLoaderOnConfirm: true,
                     preConfirm: () => {
 
-                        const companyName = $('#companyName').val();
-                        const companyEmail = $('#companyEmail').val();
-                        const companyLogo = $('#companyLogo').val();
-                        const companyWebSite = $('#companyWebSite').val();
+                        const form = $('#addCompanyForm');
+                        console.log("form", form)
 
-                        const data = {
-                            "name": companyName,
-                            "email": companyEmail,
-                            "logo": companyLogo,
-                            "website": companyWebSite,
-                        }
+                        form.submit();
 
-                        const requestOptions = {
-                            method: 'POST', // *GET, POST, PUT, DELETE, etc.
-                            mode: 'cors', // no-cors, *cors, same-origin
-                            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-                            credentials: 'same-origin', // include, *same-origin, omit
-                            headers: {
-                                'Content-Type': 'application/json'
-                                // 'Content-Type': 'application/x-www-form-urlencoded',
-                            },
-                            redirect: 'follow', // manual, *follow, error
-                            referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-                            body: JSON.stringify(data)
-                        }
+                        // const companyName = $('#companyName').val();
+                        // const companyEmail = $('#companyEmail').val();
+                        // const companyLogo = $('#companyLogo').val();
+                        // const companyWebSite = $('#companyWebSite').val();
 
-                        console.log("preData", data);
+                        // const data = {
+                        //     "name": companyName,
+                        //     "email": companyEmail,
+                        //     "logo": companyLogo,
+                        //     "website": companyWebSite,
+                        // }
 
-                        return fetch("{{ route('companies.store') }}", requestOptions)
-                            .then(response => console.log(response));
+                        // const requestOptions = {
+                        //     method: 'POST', // *GET, POST, PUT, DELETE, etc.
+                        //     mode: 'cors', // no-cors, *cors, same-origin
+                        //     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                        //     credentials: 'same-origin', // include, *same-origin, omit
+                        //     headers: {
+                        //         'Content-Type': 'application/json'
+                        //         // 'Content-Type': 'application/x-www-form-urlencoded',
+                        //     },
+                        //     redirect: 'follow', // manual, *follow, error
+                        //     referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+                        //     body: JSON.stringify(data)
+                        // }
+
+                        // console.log("preData", data);
+
+                        // return fetch("{{ route('companies.store') }}", requestOptions)
+                        //     .then(response => {
+                        //         location.reload();
+                        //     });
+
+
                     }
                 })
 
-                console.log("promise", prePostCompany)
+                // prePostCompany.then(res=> console.log("res", res))
 
                 // .then((result) => {
                 //     if (result.isConfirmed) {
@@ -179,8 +205,6 @@
                 //         // form.submit();
                 //     }
                 // })
-
-
             });
 
             $('.show-alert-delete-box').click(function(event) {
