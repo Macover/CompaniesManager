@@ -50,6 +50,7 @@
                                                 </button>
                                                 <form method="POST" class="d-inline"
                                                     action="{{ route('companies.destroy', ['company' => $company->id]) }}">
+                                                    @csrf
                                                     @method('DELETE')
                                                     <input type="hidden" class="companyName" value="{{ $company->name }}">
                                                     <button type="submit"
@@ -93,41 +94,23 @@
                 )
             @endif
 
-            @if (isset($errors))
-
-                let errors1 =
-                    "@foreach ($errors->all() as $error)
-                        "{{$error}}"
-                    @endforeach"
-                console.log(errors1)
-
+            @if (session()->has('errors'))
                 Swal.fire(
                     'Error!',
-                    @foreach ($errors->all() as $error)
-                        `{{ $errors }}`,
-                    @endforeach
+                    '{{$errors->all()[0]}}',
                     'error'
-                )
-            @endif
-
-            @if (session()->has('error'))
-                Swal.fire(
-                    'Error!',
-                    `{{ session()->get('error') }}`,
-                    'error'
-                )
+                );
             @endif
 
             $('#example').DataTable();
 
             $('#newCompanyBtn').click(async function(e) {
-
                 e.preventDefault();
-
                 const companyPromise = await Swal.fire({
                     title: 'New company',
                     html: `
                             <form id="addCompanyForm" action="{{ route('companies.store') }}" method="post" class="form">
+                                @csrf
                                 <div class="mb-3 d-flex flex-column">
                                     <label for="companyName" class="form-label text-start">Company Name</label>
                                     <input name="name" placeholder="Ex. Microsoft" id="companyName" type="text"
@@ -153,58 +136,10 @@
                     confirmButtonText: 'Add',
                     showLoaderOnConfirm: true,
                     preConfirm: () => {
-
                         const form = $('#addCompanyForm');
-                        console.log("form", form)
-
                         form.submit();
-
-                        // const companyName = $('#companyName').val();
-                        // const companyEmail = $('#companyEmail').val();
-                        // const companyLogo = $('#companyLogo').val();
-                        // const companyWebSite = $('#companyWebSite').val();
-
-                        // const data = {
-                        //     "name": companyName,
-                        //     "email": companyEmail,
-                        //     "logo": companyLogo,
-                        //     "website": companyWebSite,
-                        // }
-
-                        // const requestOptions = {
-                        //     method: 'POST', // *GET, POST, PUT, DELETE, etc.
-                        //     mode: 'cors', // no-cors, *cors, same-origin
-                        //     cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-                        //     credentials: 'same-origin', // include, *same-origin, omit
-                        //     headers: {
-                        //         'Content-Type': 'application/json'
-                        //         // 'Content-Type': 'application/x-www-form-urlencoded',
-                        //     },
-                        //     redirect: 'follow', // manual, *follow, error
-                        //     referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-                        //     body: JSON.stringify(data)
-                        // }
-
-                        // console.log("preData", data);
-
-                        // return fetch("{{ route('companies.store') }}", requestOptions)
-                        //     .then(response => {
-                        //         location.reload();
-                        //     });
-
-
                     }
                 })
-
-                // prePostCompany.then(res=> console.log("res", res))
-
-                // .then((result) => {
-                //     if (result.isConfirmed) {
-                //         // let form = $('#formAddCompany');
-                //         // console.log("form", form)
-                //         // form.submit();
-                //     }
-                // })
             });
 
             $('.show-alert-delete-box').click(function(event) {

@@ -6,7 +6,6 @@ use App\Http\Requests\CompanyStoreRequest;
 use App\Models\Company;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Session;
 
 class CompanyController extends Controller
 {
@@ -23,27 +22,17 @@ class CompanyController extends Controller
     {
 
         return DB::transaction(function () use ($company) {
-
             try {
                 Company::create($company->validated());
                 Log::channel('info')->info("The company was created succesfully");
                 return redirect()
                     ->route('companies')
-                    ->with(['success' => "{$company->name} was created"]);
+                    ->with(['success' => "{$company->name} company was created"]);
             } catch (\Throwable $th) {
-                // Log::channel('error')->error("The company was not created succesfully {$th}}");
-
-                dump($company->messages());
-
-                // for ($i = 0; $i < $company->messages(); $i++) {
-                //     Log::channel('error')->error("{$i}.- {}}");
-                // }
-                // foreach ($company->messages() as $key => $error) {
-                //     Log::channel('error')->error("{$key}.- {$error}}");
-                // }
+                Log::channel('error')->error("The company was not created succesfully {$th}}");
                 return redirect()
                     ->route('companies')
-                    ->with(['error' => "{$company->name} error"]);
+                    ->with(['error' => "Was an error in {$company->name}"]);
             }
         });
     }
