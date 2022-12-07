@@ -2,12 +2,6 @@
 
 @section('title', 'Admin - Companies')
 
-@section('heading')
-    <h2 class="m-0 font-semibold text-xl text-gray-800 leading-tight">
-        Companies
-    </h2>
-@endsection
-
 @section('content')
 
     <div class="container px-16">
@@ -48,13 +42,13 @@
                                                     <i class="fa-regular fa-pen-to-square"></i>
                                                     Edit
                                                 </button>
-                                                <form method="POST" class="d-inline"
+                                                <form method="POST" class="d-inline flex-1"
                                                     action="{{ route('companies.destroy', ['company' => $company->id]) }}">
                                                     @csrf
                                                     @method('DELETE')
                                                     <input type="hidden" class="companyName" value="{{ $company->name }}">
                                                     <button type="submit"
-                                                        class="btn btn-outline-danger flex-1 show-alert-delete-box">
+                                                        class="w-100 btn btn-outline-danger show-alert-delete-box">
                                                         X
                                                         Delete
                                                     </button>

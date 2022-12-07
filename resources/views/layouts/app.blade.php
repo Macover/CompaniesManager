@@ -37,13 +37,6 @@
     <div class="min-h-screen bg-gray-100">
 
         @include('layouts.navigation')
-
-        <!-- Page Heading -->
-        <header class="bg-white shadow">
-            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                @yield('heading')
-            </div>
-        </header>
         <!-- Page Content -->
         <main class="bg-white w-100 min-vh-100 px-16 px-sm-1 px-md-4 px-lg-5 px-xl-5 px-xxl-5">
             @yield('content')
