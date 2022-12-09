@@ -30,9 +30,8 @@
                                     <td>{{ $company->name }}</td>
                                     <td>{{ $company->email }}</td>
                                     <td>
-                                        <a href="#">
-                                            Open logo...
-                                        </a>
+                                        <a href="#" class="alert-link show-alert-logo-modal"
+                                            path="{{ $company->logo }}">Open logo</a>
                                     </td>
                                     <td>{{ $company->website }}</td>
                                     <td>
@@ -91,7 +90,7 @@
             @if (session()->has('errors'))
                 Swal.fire(
                     'Error!',
-                    '{{$errors->all()[0]}}',
+                    '{{ $errors->all()[0] }}',
                     'error'
                 );
             @endif
@@ -103,29 +102,30 @@
                 const companyPromise = await Swal.fire({
                     title: 'New company',
                     html: `
-                            <form id="addCompanyForm" action="{{ route('companies.store') }}" method="post" class="form">
-                                @csrf
-                                <div class="mb-3 d-flex flex-column">
-                                    <label for="companyName" class="form-label text-start">Company Name</label>
-                                    <input name="name" placeholder="Ex. Microsoft" id="companyName" type="text"
-                                        class="form-control">
-                                </div>
-                                <div class="mb-3 d-flex flex-column">
-                                    <label for="companyEmail" class="form-label text-start">Email</label>
-                                    <input name="email" placeholder="Ex. microsoft@hotmail.com" id="companyEmail" type="email"
-                                        class="form-control">
-                                </div>
-                                <div class="mb-3 d-flex flex-column">
-                                    <label for="companyLogo" class="form-label text-start">Logo</label>
-                                    <input name="logo" placeholder="Ex. Path/safds/sdf" id="companyLogo" type="text"
-                                        class="form-control">
-                                </div>
-                                <div class="mb-3 d-flex flex-column">
-                                    <label for="companyWebSite" class="form-label text-start">Website</label>
-                                    <input name="website" placeholder="Ex. microsoft.com" id="companyWebSite" type="text"
-                                        class="form-control">
-                                </div>
-                            </form>`,
+                    <form enctype="multipart/form-data" id="addCompanyForm" action="{{ route('companies.store') }}" method="post" class="form">
+                        @csrf
+                        <div class="mb-3 d-flex flex-column">
+                            <label for="companyName" class="form-label text-start">Company Name</label>
+                            <input name="name" placeholder="Ex. Microsoft" id="companyName" type="text" class="form-control">
+                        </div>
+                        <div class="mb-3 d-flex flex-column">
+                            <label for="companyEmail" class="form-label text-start">Email</label>
+                            <input name="email" placeholder="Ex. microsoft@hotmail.com" id="companyEmail" type="email"
+                                class="form-control">
+                        </div>
+                        <div class="mb-3 d-flex flex-column">
+                            <label for="companyLogo" class="form-label text-start">Logo</label>
+                            <input accept="image/png, image/jpeg" aria-describedby="fileHelpId" name="logo" placeholder="Ex. Path/safds/sdf" id="companyLogo"
+                                type="file" class="form-control">
+                            <div id="fileHelpId" class="form-text text-start">jpg, png*</div>
+                        </div>
+                        <div class="mb-3 d-flex flex-column">
+                            <label for="companyWebSite" class="form-label text-start">Website</label>
+                            <input name="website" placeholder="Ex. microsoft.com" id="companyWebSite" type="text"
+                                class="form-control">
+                        </div>
+                    </form>
+                            `,
                     showCancelButton: true,
                     confirmButtonText: 'Add',
                     showLoaderOnConfirm: true,
@@ -157,6 +157,15 @@
 
             })
 
+            $('.show-alert-logo-modal').click(function() {
+                let path = $(this).attr('path');
+                let newPath = `{{asset('storage/')}}/${path}`;
+                Swal.fire({
+                    imageUrl: newPath,
+                    imageWidth: 100,
+                    imageHeight: 100,
+                })
+            })
         });
     </script>
 @endsection

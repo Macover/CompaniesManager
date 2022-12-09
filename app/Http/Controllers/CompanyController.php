@@ -6,6 +6,7 @@ use App\Http\Requests\CompanyStoreRequest;
 use App\Models\Company;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class CompanyController extends Controller
 {
@@ -21,9 +22,19 @@ class CompanyController extends Controller
     public function store(CompanyStoreRequest $company)
     {
 
+        // dd($company->logo);
         return DB::transaction(function () use ($company) {
             try {
-                Company::create($company->validated());
+                $companyValidated = $company->validated();
+                $companyPathLogo = Storage::disk('public')->put("Logos",$company->logo);
+                // dump($companyValidated);
+                // dd($companyValidated['name']);
+                Company::create([
+                    'name' => $companyValidated['name'],
+                    'email' => $companyValidated['email'],
+                    'logo' => $companyPathLogo,
+                    'website' => $companyValidated['website']
+                ]);
                 Log::channel('info')->info("The company was created succesfully");
                 return redirect()
                     ->route('companies')
