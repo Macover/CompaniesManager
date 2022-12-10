@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
     /* Companies */
     Route::get('/companies', [CompanyController::class, 'index'])->name('companies');
     Route::post('/companies', [CompanyController::class, 'store'])->name('companies.store');
+    Route::put('/companies', [CompanyController::class, 'update'])->name('companies.update');
     Route::delete('/companies/{company}', [CompanyController::class, 'destroy'])->name('companies.destroy');
 
     /* Employees */

@@ -22,13 +22,10 @@ class CompanyController extends Controller
     public function store(CompanyStoreRequest $company)
     {
 
-        // dd($company->logo);
         return DB::transaction(function () use ($company) {
             try {
                 $companyValidated = $company->validated();
-                $companyPathLogo = Storage::disk('public')->put("Logos",$company->logo);
-                // dump($companyValidated);
-                // dd($companyValidated['name']);
+                $companyPathLogo = Storage::disk('public')->put("Logos", $company->logo);
                 Company::create([
                     'name' => $companyValidated['name'],
                     'email' => $companyValidated['email'],
@@ -44,6 +41,33 @@ class CompanyController extends Controller
                 return redirect()
                     ->route('companies')
                     ->with(['error' => "Was an error in {$company->name}"]);
+            }
+        });
+    }
+
+    public function update(CompanyStoreRequest $companyRequest)
+    {
+
+        return DB::transaction(function () use ($companyRequest) {
+            try {
+                $companyValidated = $companyRequest->validated();
+                // $companyPathLogo = Storage::disk('public')->put("Logos",$company->logo);
+
+                $company = Company::where('email', $companyValidated['email'])->first();
+                dd($company);
+
+                // $company->update($companyValidated);
+                // Log::channel('info')->info("The company was updated succesfully");
+
+                // return redirect()
+                //     ->route('companies')
+                //     ->with(['success' => "{$companyRequest->name} company was updated"]);
+
+            } catch (\Throwable $th) {
+                Log::channel('error')->error("The company was not be updated{$th}}");
+                return redirect()
+                    ->route('companies')
+                    ->with(['error' => "Was an error in {$companyRequest->name}"]);
             }
         });
     }
