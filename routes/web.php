@@ -32,6 +32,7 @@ Route::middleware('auth')->group(function () {
 
     /* Employees */
     Route::get('/employees', [EmployeeController::class, 'index'])->name('employees');
+    Route::post('/employees', [EmployeeController::class, 'store'])->name('employees.store');
 });
 
 Route::middleware('auth')->group(function () {
