@@ -55,6 +55,7 @@
                                             </div>
                                         </div>
                                     </td>
+                                    <input type="hidden" value="{{ $company->id }}" />
                                 </tr>
                             @endforeach
                         @endisset
@@ -140,6 +141,7 @@
                 e.preventDefault();
                 let rowsValues = $(this).closest("tr").children();
 
+                const companyId = rowsValues.closest("input")[0].value;
                 const companyName = rowsValues[0].innerHTML;
                 const companyEmail = rowsValues[1].innerHTML;
                 const companyLogoPath = rowsValues[2].children[0].getAttribute("path");
@@ -149,7 +151,7 @@
                     title: 'Update company',
                     html: `
                     <form enctype="multipart/form-data" id="updateCompanyForm" action="{{ route('companies.update') }}" method="post" class="form">
-                        @method('PUT')
+                        @method('PATCH')
                         @csrf
                         <div class="mb-3 d-flex flex-column">
                             <label for="companyName" class="form-label text-start">Company Name</label>
@@ -176,6 +178,7 @@
                             <input name="website" value="${companyWebSite}" id="companyWebSite" type="text"
                                 class="form-control">
                         </div>
+                        <input type="hidden" name="company_id" value="${companyId}"/>
                     </form>
                 `,
                     showCancelButton: true,

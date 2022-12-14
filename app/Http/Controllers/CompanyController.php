@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CompanyStoreRequest;
+use App\Http\Requests\CompanyUpdateRequest;
 use App\Models\Company;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -45,23 +47,35 @@ class CompanyController extends Controller
         });
     }
 
-    public function update(CompanyStoreRequest $companyRequest)
+    public function update(CompanyUpdateRequest $companyRequest)
     {
 
         return DB::transaction(function () use ($companyRequest) {
             try {
                 $companyValidated = $companyRequest->validated();
-                // $companyPathLogo = Storage::disk('public')->put("Logos",$company->logo);
+                $company = Company::where('id', $companyRequest->company_id)->first();
 
-                $company = Company::where('email', $companyValidated['email'])->first();
-                dd($company);
+                if ($companyRequest->logo == null) {
+                    $company->update([
+                        'name' => $companyValidated['name'],
+                        'email' => $companyValidated['email'],
+                        'website' => $companyValidated['website']
+                    ]);
+                } else {
+                    Storage::disk('public')->delete($company->logo);
+                    $companyPathLogo = Storage::disk('public')->put("Logos", $companyRequest->logo);
+                    $company->update([
+                        'name' => $companyValidated['name'],
+                        'email' => $companyValidated['email'],
+                        'logo' => $companyPathLogo,
+                        'website' => $companyValidated['website']
+                    ]);
+                }
 
-                // $company->update($companyValidated);
-                // Log::channel('info')->info("The company was updated succesfully");
-
-                // return redirect()
-                //     ->route('companies')
-                //     ->with(['success' => "{$companyRequest->name} company was updated"]);
+                Log::channel('info')->info("The company was updated succesfully");
+                return redirect()
+                    ->route('companies')
+                    ->with(['success' => "{$companyRequest->name} company was updated"]);
 
             } catch (\Throwable $th) {
                 Log::channel('error')->error("The company was not be updated{$th}}");
