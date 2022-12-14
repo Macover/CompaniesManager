@@ -164,8 +164,8 @@
                         </div>
                         <div class="mb-3 d-flex flex-column">
                             <label for="companyLogo" class="form-label text-start">Logo</label>
-                            <div class="d-flex flex-column">
-                                <img width=50 height=50 src="{{ asset('storage/') }}/${companyLogoPath}" />
+                            <div class="d-flex">
+                                <img class="mr-3" width=50 height=50 src="{{ asset('storage/') }}/${companyLogoPath}" />
                                 <div class="d-flex flex-column">
                                     <input accept="image/png, image/jpeg" aria-describedby="fileHelpId" name="logo" id="companyLogo"
                                         type="file" class="form-control">
