@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\EmployeeStoreRequest;
+use App\Models\Company;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -13,6 +14,7 @@ class EmployeeController extends Controller
     public function index()
     {
         return view('employees.employees', [
+            'companies' => Company::all(),
             'employees' => Employee::all()
         ]);
     }
@@ -25,7 +27,9 @@ class EmployeeController extends Controller
                 $employee = Employee::create($employeeRequest->validated());
                 Log::channel('info')->info('The employee was created');
 
-                return response()->json($employee);
+                return redirect()
+                    ->route('employees')
+                    ->with(['success' => "{$employee->first_name} was created"]);
 
             } catch (\Throwable $th) {
                 Log::channel('error')->error('The employee was not created' . $th);

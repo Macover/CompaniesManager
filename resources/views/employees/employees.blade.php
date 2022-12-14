@@ -94,6 +94,55 @@
             @endif
 
             $('#employeeTable').DataTable();
+
+            $('#newEmployeeBtn').click(async function(e){
+                e.preventDefault();
+                const employeePromise = await Swal.fire({
+                    title: 'New Employee',
+                    html: `
+                        <form id="addEmployeeForm" action="{{ route('employees.store') }}" method="post"
+                        class="form">
+                        @csrf
+                            <div class="mb-3 d-flex flex-column">
+                                <label for="name" class="form-label text-start">First name</label>
+                                <input name="first_name" placeholder="Mike" type="text"
+                                    class="form-control">
+                            </div>
+                            <div class="mb-3 d-flex flex-column">
+                                <label for="last_name" class="form-label text-start">Last name</label>
+                                <input name="last_name" placeholder="Johnson" type="text"
+                                    class="form-control">
+                            </div>
+                            <div class="mb-3 d-flex flex-column">
+                                <label for="name" class="form-label text-start">Company</label>
+                                <select class="form-select form-select-lg" name="company_id">
+                                    <option selected>Select one</option>
+                                    @foreach ($companies as $company)
+                                        <option value={{ $company->id }}>{{ $company->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-3 d-flex flex-column">
+                                <label for="email" class="form-label text-start">Email</label>
+                                <input name="email" placeholder="address@email.com" type="email"
+                                    class="form-control">
+                            </div>
+                            <div class="mb-3 d-flex flex-column">
+                                <label for="phone" class="form-label text-start">Phone</label>
+                                <input name="phone" placeholder="+11 342342543" type="text"
+                                    class="form-control">
+                            </div>
+                        </form>
+                    `,
+                    showCancelButton: true,
+                    confirmButtonText: 'Create',
+                    showLoaderOnConfirm: true,
+                    preConfirm: () => {
+                        const form = $('#addEmployeeForm');
+                        form.submit();
+                    }
+                })
+            });
         })
     </script>
 @endsection

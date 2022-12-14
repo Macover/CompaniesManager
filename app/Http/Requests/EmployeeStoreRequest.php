@@ -26,9 +26,18 @@ class EmployeeStoreRequest extends FormRequest
         return [
             'first_name' => 'required|max:50',
             'last_name' => 'required|max:50',
-            'company_id' => 'required|numeric',
+            'company_id' => 'required',
             'email' => 'required|unique:employees,email',
             'phone' => 'required|max:11'
         ];
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            if (!is_numeric($this->company_id)) {
+                $validator->errors()->add('field', 'Company invalid!');
+            }
+        });
     }
 }
