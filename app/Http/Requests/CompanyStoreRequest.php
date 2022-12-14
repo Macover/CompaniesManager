@@ -25,8 +25,8 @@ class CompanyStoreRequest extends FormRequest
     {
         return [
             'name' => 'required|max:25',
-            'email' => 'required|max:50|unique:companies,email',
-            // 'logo' => 'required|image|max:1024',
+            'email' => 'required|email|max:50|unique:companies,email',
+            'logo' => 'required|image|max:1024',
             'website' => 'required|max:50',
         ];
     }

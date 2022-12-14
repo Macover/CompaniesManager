@@ -26,7 +26,7 @@ class CompanyUpdateRequest extends FormRequest
     {
         return [
             'name' => 'required|max:25',
-            'email' => "required|max:255|unique:companies,email,{$this->email}",
+            'email' => "required|email|max:255|unique:companies,email,{$this->email}",
             'logo' => 'image|max:1024',
             'website' => 'required|max:50',
         ];
