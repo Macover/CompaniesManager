@@ -76,7 +76,6 @@ class CompanyController extends Controller
                 return redirect()
                     ->route('companies')
                     ->with(['success' => "{$companyRequest->name} company was updated"]);
-
             } catch (\Throwable $th) {
                 Log::channel('error')->error("The company was not be updated{$th}}");
                 return redirect()
@@ -88,11 +87,25 @@ class CompanyController extends Controller
 
     public function destroy(Company $company)
     {
+
         return DB::transaction(function () use ($company) {
-            $company->delete();
-            return redirect()
-                ->route('companies')
-                ->with(['success' => "{$company->name} was deleted successfully"]);
+            try {
+                if ($company->employees()->count() == 0) {
+                    $company->delete();
+                    return redirect()
+                        ->route('companies')
+                        ->with(['success' => "{$company->name} was deleted successfully"]);
+                } else {
+                    return redirect()
+                        ->route('companies')
+                        ->with(['error' => "The company has employees, can't be deleted."]);
+                }
+            } catch (\Throwable $th) {
+                Log::channel('error')->error("The company was not be updated{$th}}");
+                return redirect()
+                    ->route('companies')
+                    ->with(['errors' => "Was an error in {$company->name}"]);
+            }
         });
     }
 }

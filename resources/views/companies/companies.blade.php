@@ -96,6 +96,14 @@
                 );
             @endif
 
+            @if (session()->has('error'))
+                Swal.fire(
+                    'Error!',
+                    `{{ session()->get('error')}}`,
+                    'error'
+                );
+            @endif
+
             $('#example').DataTable();
 
             $('#newCompanyBtn').click(async function(e) {
