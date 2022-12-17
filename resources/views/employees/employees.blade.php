@@ -33,6 +33,7 @@
                                     <td>{{ $employee->company->name }}</td>
                                     <td>{{ $employee->email }}</td>
                                     <td>{{ $employee->phone }}</td>
+                                    <input value="{{$employee->id}}" type="hidden"/>
                                     <td>
                                         <div class="row">
                                             <div class="col-12 d-flex gap-2">
@@ -119,10 +120,10 @@
                                 <label for="name" class="form-label text-start">Company</label>
                                 <select class="form-select form-select-lg" name="company_id">
                                     <option selected>Select one</option>
-                                    @foreach ($employees as $company)employee value={{ $employee->id }}>{{ $company->name }}</option>
+                                    @foreach ($companies as $company)
+                                    <option value={{ $company->id }}>{{ $company->name }}</option>
                                     @endforeach
                                 </select>
-                            employeedivfirst_name
                             <div class="mb-3 d-flex flex-column">
                                 <label for="email" class="form-label text-start">Email</label>
                                 <input name="email" placeholder="address@email.com" type="email"
@@ -145,15 +146,70 @@
                 })
             });
 
+            $('.show-alert-edit-modal').click(async function (e) {
+                e.preventDefault();
+                const rowValues = $(this).closest("tr").children();
 
+                const employeeId = rowValues[5].value;
+                const firstName = rowValues[0].innerHTML;
+                const lastName = rowValues[1].innerHTML;
+                const companyName = rowValues[2].innerHTML;
+                const email = rowValues[3].innerHTML;
+                const phone = rowValues[4].innerHTML;
+
+                const employeePromise = await Swal.fire({
+                    title: `Edit Employee`,
+                    html: `
+                        <form id="updateForm" action="{{ route('employees.update') }}" method="post"
+                        class="form">
+                        @method('PATCH')
+                        @csrf
+                            <input value="${employeeId}" name="employee_id" type="hidden"/>
+                            <div class="mb-3 d-flex flex-column">
+                                <label for="name" class="form-label text-start">First name</label>
+                                <input value="${firstName}" name="first_name" placeholder="Mike" type="text"
+                                    class="form-control">
+                            </div>
+                            <div class="mb-3 d-flex flex-column">
+                                <label for="last_name" class="form-label text-start">Last name</label>
+                                <input value="${lastName}" name="last_name" placeholder="Johnson" type="text"
+                                    class="form-control">
+                            </div>
+                            <div class="mb-3 d-flex flex-column">
+                                <label for="name" class="form-label text-start">Company</label>
+                                <select class="form-select form-select-lg" name="company_id">
+                                    @foreach ($companies as $company)
+                                        <option
+                                        ${companyName == "{{$company->name}}" ? 'selected' : ''}
+                                        value={{ $company->id }}>{{ $company->name }}</option>
+                                    @endforeach
+                                </select>
+                            <div class="mb-3 d-flex flex-column">
+                                <label for="email" class="form-label text-start">Email</label>
+                                <input value="${email}" name="email" placeholder="address@email.com" type="email"
+                                    class="form-control">
+                            </div>
+                            <div class="mb-3 d-flex flex-column">
+                                <label for="phone" class="form-label text-start">Phone</label>
+                                <input value="${phone}" name="phone" placeholder="+11 342342543" type="text"
+                                    class="form-control">
+                            </div>
+                        </form>
+                    `,
+                    showCancelButton: true,
+                    confirmButtonText: 'Update',
+                    showLoaderOnConfirm: true,
+                    preConfirm: () => {
+                        const form = $('#updateForm');
+                        form.submit();
+                    }
+                })
+            })
 
             $('.show-alert-delete-box').click(function(event) {
                 event.preventDefault();
                 let form = $(this).closest("form");
                 let companyName = $(this).siblings()[2].value;
-
-                // console.log(form)
-                // console.log(employeeName)
 
                 Swal.fire({
                     title: 'Are you sure?',

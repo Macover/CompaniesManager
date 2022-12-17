@@ -38,6 +38,27 @@ class EmployeeController extends Controller
             }
         });
     }
+
+    public function update(EmployeeStoreRequest $employeeRequest)
+    {
+        return DB::transaction(function () use ($employeeRequest) {
+            try {
+                $employee = Employee::where('id',$employeeRequest->employee_id)->first();
+                $employee->update($employeeRequest->validated());
+                Log::channel('info')->info("The employee was updated succesfully");
+                return redirect()
+                    ->route('employees')
+                    ->with(['success' => "Employee updated!"]);
+
+            } catch (\Throwable $th) {
+                Log::channel('error')->error("The employee wasn't been updated{$th}}");
+                return redirect()
+                    ->route('employees')
+                    ->with(['error' => "Was an error in {$employeeRequest->name}"]);
+            }
+        });
+    }
+
     public function destroy(Employee $employee)
     {
         return DB::transaction(function () use ($employee) {
