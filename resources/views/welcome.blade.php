@@ -409,13 +409,9 @@
                             @if (Route::has('login'))
                             <div class="ml-12">
                                 @auth
-                                <a href="{{ url('/dashboard') }}" class="mt-2 text-gray-600 dark:text-gray-400 text-sm ">Dashboard</a>
+                                <a href="{{ route('companies') }}" class="mt-2 text-gray-600 dark:text-gray-400 text-sm ">Dashboard</a>
                                 @else
                                 <a href="{{ route('login') }}" class="mt-2 text-gray-600 dark:text-gray-400 text-sm ">Log in</a>
-
-                                @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="mt-2 text-gray-600 dark:text-gray-400 text-sm">Register</a>
-                                @endif
                                 @endauth
                             </div>
                             @endif

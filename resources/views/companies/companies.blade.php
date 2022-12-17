@@ -215,7 +215,6 @@
 
             $('.show-alert-logo-modal').click(function() {
                 let path = $(this).attr('path');
-                console.log(path)
                 let newPath = `{{ asset('storage/') }}/${path}`;
                 Swal.fire({
                     imageUrl: newPath,
