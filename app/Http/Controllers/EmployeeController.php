@@ -30,12 +30,28 @@ class EmployeeController extends Controller
                 return redirect()
                     ->route('employees')
                     ->with(['success' => "{$employee->first_name} was created"]);
-
             } catch (\Throwable $th) {
                 Log::channel('error')->error('The employee was not created' . $th);
                 return redirect()
                     ->route('employees')
                     ->with(['error' => "Was an error in {$employeeRequest->name}"]);
+            }
+        });
+    }
+    public function destroy(Employee $employee)
+    {
+        return DB::transaction(function () use ($employee) {
+            try {
+                Log::channel('info')->info("{$employee->first_name}".'The employee was deleted');
+                $employee->delete();
+                return redirect()
+                    ->route('employees')
+                    ->with(['success' => "{$employee->first_name} was deleted successfully"]);
+            } catch (\Throwable $th) {
+                Log::channel('error')->error('The employee was not created' . $th);
+                return redirect()
+                    ->route('employees')
+                    ->with(['error' => "{$employee->first_name} wasn't be deleted"]);
             }
         });
     }

@@ -40,9 +40,11 @@
                                                     <i class="fa-regular fa-pen-to-square"></i>
                                                     Edit
                                                 </button>
-                                                <form method="POST" class="d-inline flex-1" {{-- action="{{ route('companies.destroy', ['company' => $company->id]) }}" --}}>
+                                                <form method="POST" class="d-inline flex-1"
+                                                    action="{{ route('employees.destroy', ['employee' => $employee->id]) }}">
                                                     @csrf
                                                     @method('DELETE')
+                                                    <input type="hidden" class="companyName" value="{{ $employee->first_name }}">
                                                     <button type="submit"
                                                         class="w-100 btn btn-outline-danger show-alert-delete-box">
                                                         X
@@ -117,11 +119,10 @@
                                 <label for="name" class="form-label text-start">Company</label>
                                 <select class="form-select form-select-lg" name="company_id">
                                     <option selected>Select one</option>
-                                    @foreach ($companies as $company)
-                                        <option value={{ $company->id }}>{{ $company->name }}</option>
+                                    @foreach ($employees as $company)employee value={{ $employee->id }}>{{ $company->name }}</option>
                                     @endforeach
                                 </select>
-                            </div>
+                            employeedivfirst_name
                             <div class="mb-3 d-flex flex-column">
                                 <label for="email" class="form-label text-start">Email</label>
                                 <input name="email" placeholder="address@email.com" type="email"
@@ -143,6 +144,32 @@
                     }
                 })
             });
+
+
+
+            $('.show-alert-delete-box').click(function(event) {
+                event.preventDefault();
+                let form = $(this).closest("form");
+                let companyName = $(this).siblings()[2].value;
+
+                // console.log(form)
+                // console.log(employeeName)
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: `${companyName} will be deleted`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                })
+
+            })
         })
     </script>
 @endsection
