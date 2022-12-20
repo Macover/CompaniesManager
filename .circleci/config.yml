@@ -13,9 +13,6 @@ jobs:
           keys:
             - v1-dependencies-{{ checksum "composer.json" }}
       - run:
-          name: "Heroku run bash"
-          command: heroku run bash
-      - run:
           name: "Install Dependencies"
           command: composer install --dev
 
