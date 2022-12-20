@@ -30,6 +30,7 @@ jobs:
       - run:
           command: |
             heroku run --app=${HEROKU_APP_NAME} php artisan migrate:fresh --force --seed
+      - storage/link:          
           command: |
             heroku run --app=${HEROKU_APP_NAME} php artisan storage:link            
 workflows:
