@@ -3,6 +3,7 @@
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,6 +37,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/employees', [EmployeeController::class, 'update'])->name('employees.update');
     Route::delete('/employees/{employee}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
 
+});
+
+Route::get('/artisan/storage', function () {
+    $command = 'storage:link';
+    $result = Artisan::call($command);
+    return Artisan::output();
 });
 
 require __DIR__ . '/auth.php';
