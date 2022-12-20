@@ -14,7 +14,7 @@ jobs:
             - v1-dependencies-{{ checksum "composer.json" }}
       - run:
           name: "Install Dependencies"
-          command: composer install -n --prefer-dist
+          command: composer install -n --prefer-dist && npm install
 
       - save_cache:
           key: v1-dependencies-{{ checksum "composer.json" }}
@@ -29,7 +29,7 @@ jobs:
           force: true
       - run:
           command: |
-            heroku run --app=${HEROKU_APP_NAME} php artisan migrate:fresh --force
+            heroku run --app=${HEROKU_APP_NAME} php artisan migrate:fresh --force --seed
 workflows:
   deploy:
     jobs:
