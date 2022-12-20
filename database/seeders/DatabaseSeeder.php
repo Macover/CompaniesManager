@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
         ]);
 
-        Company::factory(5)->create();
+        Company::factory(7)->create();
         Employee::factory(10)->create();
     }
 }
