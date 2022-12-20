@@ -29,7 +29,7 @@ jobs:
           force: true
       - run:
           command: |
-            heroku run --app=${HEROKU_APP_NAME} php artisan migrate --seed --force && npm install
+            heroku run --app=${HEROKU_APP_NAME} php artisan migrate:fresh --force
 workflows:
   deploy:
     jobs:
