@@ -29,7 +29,10 @@ jobs:
           force: true
       - run:
           command: |
-            heroku run --app=${HEROKU_APP_NAME} php artisan migrate:fresh --force --seed
+            heroku run --app=${HEROKU_APP_NAME} php artisan migrate:fresh --force
+      - run:
+          command: |
+            heroku run --app=${HEROKU_APP_NAME} php artisan db:seed
       - run:
           command: |
             heroku run --app=${HEROKU_APP_NAME} php artisan storage:link
