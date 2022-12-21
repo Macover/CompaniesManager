@@ -5,7 +5,8 @@
                 <img
                     width="50"
                     height="50" class="logo__img" alt="logo"
-                    src="{{ asset('storage/organization-64.png') }}" />
+                    src="https://res.cloudinary.com/dbvzcj3yj/image/upload/v1671658594/ouqgwdxti8fpuv9paneg.png"
+                     />
             </a>
         </x-slot>
 
