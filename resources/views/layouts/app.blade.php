@@ -30,7 +30,7 @@
 
     <!-- Icons -->
     <script src="https://kit.fontawesome.com/c42fe0a229.js" crossorigin="anonymous"></script>
-
+    @cloudinaryJS
 </head>
 
 <body class="font-sans antialiased">

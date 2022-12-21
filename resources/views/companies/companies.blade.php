@@ -31,7 +31,7 @@
                                     <td>{{ $company->email }}</td>
                                     <td>
                                         <a href="#" class="alert-link show-alert-logo-modal"
-                                            path="{{ $company->logo }}">Open logo</a>
+                                            path="{{ $company->fetchFirstMedia()->file_url ?? $company->fetchFirstMedia() }}">Open logo</a>
                                     </td>
                                     <td>{{ $company->website }}</td>
                                     <td>
@@ -173,7 +173,7 @@
                         <div class="mb-3 d-flex flex-column">
                             <label for="companyLogo" class="form-label text-start">Logo</label>
                             <div class="d-flex">
-                                <img class="mr-3" width=50 height=50 src="{{ asset('storage/') }}/${companyLogoPath}" />
+                                <img src="${companyLogoPath}" alt="${companyName}" class="mr-3" width=50 height=50/>
                                 <div class="d-flex flex-column">
                                     <input accept="image/png, image/jpeg" aria-describedby="fileHelpId" name="logo" id="companyLogo"
                                         type="file" class="form-control">
@@ -223,9 +223,9 @@
 
             $('.show-alert-logo-modal').click(function() {
                 let path = $(this).attr('path');
-                let newPath = `{{ asset('storage/') }}/${path}`;
+                console.log(path)
                 Swal.fire({
-                    imageUrl: newPath,
+                    imageUrl: path,
                     imageWidth: 100,
                     imageHeight: 100,
                 })

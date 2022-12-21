@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CompanyStoreRequest;
 use App\Http\Requests\CompanyUpdateRequest;
 use App\Models\Company;
+use Cloudinary\Cloudinary;
+use CloudinaryLabs\CloudinaryLaravel\MediaAlly;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -27,13 +29,10 @@ class CompanyController extends Controller
         return DB::transaction(function () use ($company) {
             try {
                 $companyValidated = $company->validated();
-                $companyPathLogo = Storage::disk('public')->put("Logos", $company->logo);
-                Company::create([
-                    'name' => $companyValidated['name'],
-                    'email' => $companyValidated['email'],
-                    'logo' => $companyPathLogo,
-                    'website' => $companyValidated['website']
-                ]);
+
+                $company = Company::create($companyValidated);
+                $company->attachMedia($company->logo);
+
                 Log::channel('info')->info("The company was created succesfully");
                 return redirect()
                     ->route('companies')
@@ -52,24 +51,12 @@ class CompanyController extends Controller
 
         return DB::transaction(function () use ($companyRequest) {
             try {
-                $companyValidated = $companyRequest->validated();
-                $company = Company::where('id', $companyRequest->company_id)->first();
 
-                if ($companyRequest->logo == null) {
-                    $company->update([
-                        'name' => $companyValidated['name'],
-                        'email' => $companyValidated['email'],
-                        'website' => $companyValidated['website']
-                    ]);
-                } else {
-                    Storage::disk('public')->delete($company->logo);
-                    $companyPathLogo = Storage::disk('public')->put("Logos", $companyRequest->logo);
-                    $company->update([
-                        'name' => $companyValidated['name'],
-                        'email' => $companyValidated['email'],
-                        'logo' => $companyPathLogo,
-                        'website' => $companyValidated['website']
-                    ]);
+                $company = Company::where('id', $companyRequest->company_id)->first();
+                $company->update($companyRequest->validated());
+
+                if ($companyRequest->logo != null) {
+                    $company->updateMedia($companyRequest->logo);
                 }
 
                 Log::channel('info')->info("The company was updated succesfully");

@@ -21,8 +21,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
-
 Route::middleware('auth')->group(function () {
 
     /* Companies */
@@ -37,12 +35,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/employees', [EmployeeController::class, 'update'])->name('employees.update');
     Route::delete('/employees/{employee}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
 
-});
-
-Route::get('/artisan/storage', function () {
-    $command = 'storage:link';
-    $result = Artisan::call($command);
-    return Artisan::output();
 });
 
 require __DIR__ . '/auth.php';
