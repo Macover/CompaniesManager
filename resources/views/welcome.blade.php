@@ -402,7 +402,7 @@
                     <div class="p-6">
                         <div class="flex items-center">
                             <img width="45" height="45" class="logo__img" alt="logo"
-                                src="{{ asset('storage/organization-64-white.png') }}" />
+                                src="https://res.cloudinary.com/dbvzcj3yj/image/upload/v1671658569/a7souuwbhm1my9lyjxuw.png" />
                             <div class="ml-4 text-lg leading-7 font-semibold">
                                 <p class="text-gray-900 dark:text-white ">Companies Manager</p>
                             </div>

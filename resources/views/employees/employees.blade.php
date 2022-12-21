@@ -18,10 +18,17 @@
                             <th>Actions</th>
                         </tr>
                         <div class="container m-0 p-0 w-100 d-flex my-4 justify-content-end">
-                            <button class="btn btn-primary" id="newEmployeeBtn">
-                                <i class="fa-solid fa-plus mr-2"></i>
-                                New employee
-                            </button>
+                            @if($companies->isEmpty())
+                                <button disabled class="btn btn-info" id="newEmployeeBtn">
+                                    <i class="fa-solid fa-plus mr-2"></i>
+                                    You need to add a company first
+                                </button>
+                            @else
+                                <button class="btn btn-primary" id="newEmployeeBtn">
+                                    <i class="fa-solid fa-plus mr-2"></i>
+                                    New employee
+                                </button>
+                            @endif
                         </div>
                     </thead>
                     <tbody>

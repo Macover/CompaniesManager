@@ -10,7 +10,7 @@
                             width="45"
                             height="45"
                             class="logo__img"
-                            alt="logo" src="{{asset('storage/organization-64.png')}}"/>
+                            alt="logo" src="https://res.cloudinary.com/dbvzcj3yj/image/upload/v1671658594/ouqgwdxti8fpuv9paneg.png"/>
                     </a>
                 </div>
 
